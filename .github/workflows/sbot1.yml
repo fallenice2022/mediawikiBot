@@ -29,4 +29,4 @@ jobs:
         MW_PASSWORD: ${{secrets.SBOT_PASSWORD}}
       - name: run py
       run: |
-        sync_deleteflie.py
+        src/sync_deleteflie.py
