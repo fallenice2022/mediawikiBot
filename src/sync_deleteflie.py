@@ -7,8 +7,8 @@ import re
 workspace = { #创建字典用以储存用户和令牌信息
     'URL': "https://moegirl.uk/api.php",
     'SESSION': requests.Session(),
-    'lgname': "",
-    'lgpassword': "", 
+    'lgname': process.env.SBOT_NAME,
+    'lgpassword': process.env.SBOT_PASSWORD, 
     'csrftoken': '',
     }
 
@@ -69,14 +69,13 @@ def MPostAPI(params, timeout=20):
 
 def main ( ):
     nowDate = datetime.now()
-    updateDate = nowDate - timedelta(hours=8) - timedelta(days=2)
+    updateDate = nowDate - timedelta(hours=8) - timedelta(days=1)
     print(datetime.strftime(updateDate,'%Y-%m-%dT%H:%M:%SZ'))
     resource1 = workspace['SESSION'].get("https://commons.moegirl.org.cn/api.php", params ={
         'lenamespace': '6',
         'list':'logevents',
         'leaction':'delete/delete',
-        'lestart':datetime.strftime(updateDate,'%Y-%m-%dT%H:%M:%SZ'),
-        'leend':"2023-09-30T08:30:00.000Z",
+        'leend':datetime.strftime(updateDate,'%Y-%m-%dT%H:%M:%SZ'),
         'action': 'query',
         'lelimit': 'max',
         'format': 'json'
@@ -103,8 +102,8 @@ def main ( ):
                 'token':FetchToken("csrf"),
                 'tags':'Bot'
             }
-            #if re.search('移[动動][殘残]留重定向', events[i]['comment']):
-            #    print(events[i]['title'] + "不宜自动删除，请手动检查")
+            if re.search('[違违]反法律法[规規]', events[i]['comment']):
+                print("和谐你全家")
             if 'error' in data2 and 'code' in data2['error']:#el
                 result = MPostAPI(parameters)
                 if 'error' in result and 'code' in result['error']:
