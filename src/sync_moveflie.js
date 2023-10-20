@@ -1,5 +1,6 @@
 "use strict";
 import MWBot from "mwbot";
+import moment from "moment";
 
 const mirrorAPi = new MWBot({
     apiUrl: "https://moegirl.uk/api.php",
@@ -24,7 +25,7 @@ const getlog = async () => {
     let PageList = [], apcontinue = "";
     while (apcontinue !== false) {
         try {
-            const result = new MWBot({apiUrl: "https://moegirl.uk/api.php"}, {timeout: 30000}).request({
+            const result = new MWBot({apiUrl: "https://commons.moegirl.org.cn/api.php"}, {timeout: 30000}).request({
                 lenamespace: "6",
                 list:"logevents",
                 leaction:"move/move",
