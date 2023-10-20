@@ -1,0 +1,23 @@
+#本机器人原使用浏览器控制台运行，本版本使用nodejs运行
+name: moegirl.uk同步萌娘共享文件移动
+on:
+  schedule:
+    - cron: 30 21 * * * #北京时间天凌晨5:30执行
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - run: echo "开始移动文件"
+      - name: 安装依赖
+        run: npm ci
+      - name: 更新页面
+        env:
+          MW_USERNAME: ${{secrets.IBOT_USERNAME}}
+          MW_PASSWORD: ${{secrets.IBOT_PASSWORD}}
+        run: node src/MessUpdator.js
