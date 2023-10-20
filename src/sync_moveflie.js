@@ -53,7 +53,7 @@ const movefile = async (logevent) => {
             to:logevent.params.target_title,
             format: "json",
             watchlist: "nochange",
-            noredirect: "suppressredirect" in logevent.params ?true :false,
+            noredirect: "suppressredirect" in logevent.params ? true : false,
             bot:true,
             tags:"Bot",
             token: bot.editToken,
@@ -90,7 +90,7 @@ const main = async (retryCount = 5) => {
                     await movefile(logevents[i]);// 移动文件函数
                 }
             console.log("同步移动文件结束", { type: "success" });
-        }
+            }
             return;
         } catch (error) {
             console.error(`获取数据出错，正在重试（${retries + 1}/${retryCount}）：${error}`);
