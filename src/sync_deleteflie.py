@@ -7,8 +7,8 @@ import re
 workspace = { #创建字典用以储存用户和令牌信息
     'URL': "https://moegirl.uk/api.php",
     'SESSION': requests.Session(),
-    'lgname': process.env.SBOT_NAME,
-    'lgpassword': process.env.SBOT_PASSWORD, 
+    'lgname': process.env.MW_USERNAME,
+    'lgpassword': process.env.MW_PASSWORD, 
     'csrftoken': '',
     }
 
