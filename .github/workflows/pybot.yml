@@ -1,8 +1,8 @@
-name: delete files
+name: 同步文件删除
 
 on:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: 0 22 * * * #北京时间每天凌晨6:00执行
 
 permissions:
   contents: read
