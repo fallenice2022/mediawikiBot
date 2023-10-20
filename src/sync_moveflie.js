@@ -12,8 +12,8 @@ const mirrorAPi = new MWBot({
 async function login() {
     try {
         await bot.loginGetEditToken({
-            username: process.env.MW_USERNAME,
-            password: process.env.MW_USERNAME,
+            username: process.env.IBOT_USERNAME,
+            password: process.env.IBOT_PASSWORD,
         });
     } catch (error) {
         throw new Error(`登录失败：${error}`);
