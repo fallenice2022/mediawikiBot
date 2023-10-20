@@ -1,0 +1,17 @@
+{
+  "name": "mediawikiBot",
+  "version": "0.9.1",
+  "description": "fallenice2022's Bot fo MediaWiki",
+  "main": "index.js",
+  "scripts": {
+    "sync_moveflie": "node src/sync_moveflie.js",
+  },
+  "author": "fallenice2022",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "mwbot": "^2.1.3",
+    "node-cron": "^3.0.2"
+  }
+}
