@@ -45,7 +45,7 @@ const getlog = async () => {
 };
 const movefile = async (logevent) => {
     try {
-        await bot.request("csrf",{
+        await bot.request({
             action: "move",
             from:logevent.title,
             reason:logevent.reason,
