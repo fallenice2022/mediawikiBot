@@ -80,7 +80,7 @@ const main = async (retryCount = 5) => {
             const movelog = await getlog();
             const filecount = movelog.length;
             if(filecount===0){
-                mw.notify("无可同步移动的文件", { type: "warn" });
+                console.warn("无可同步移动的文件", { type: "warn" });
             } else {
                 console.log(`正在尝试同步${filecount}条文件移动日志`);
                 for(let i=0;i<filecount;i++){
