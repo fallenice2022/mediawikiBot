@@ -1,5 +1,5 @@
 #本机器人原使用浏览器控制台运行，本版本使用nodejs运行
-name: moegirl.uk同步萌娘共享文件移动
+name: 同步文件移动
 on:
   schedule:
     - cron: 30 21 * * * #北京时间天凌晨5:30执行
@@ -20,4 +20,4 @@ jobs:
         env:
           MW_USERNAME: ${{secrets.IBOT_USERNAME}}
           MW_PASSWORD: ${{secrets.IBOT_PASSWORD}}
-        run: node src/MessUpdator.js
+        run: node src/sync_moveflie.js
