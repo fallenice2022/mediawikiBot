@@ -45,16 +45,18 @@ const getlog = async () => {
 };
 const movefile = async (logevent) => {
     try {
+        bot.editToken = (await bot.getEditToken()).csrftoken;
         await bot.request({
             action: "move",
             from:logevent.title,
-            reason:logevent.reason,
+            reason:logevent.comment,
             to:logevent.params.target_title,
             format: "json",
             watchlist: "nochange",
             noredirect: "suppressredirect" in logevent.params ?true :false,
             bot:true,
             tags:"Bot",
+            token: bot.editToken,
         });
         console.log(`已将${logevent.title}移动到${logevent.params.target_title}`);
     } catch (e) {
