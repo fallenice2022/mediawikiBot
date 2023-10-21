@@ -2,7 +2,7 @@
 name: 同步文件移动
 on:
   schedule:
-    - cron: 30 21 * * * #北京时间天凌晨5:30执行
+    - cron: 30 20 * * * #北京时间天凌晨4:30执行
   workflow_dispatch:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
           node-version: "16.x"
       - run: echo "开始移动文件"
       - name: 安装依赖
-        run: npm ci
+        run: npm i
       - name: 更新页面
         env:
           MW_USERNAME: ${{secrets.IBOT_USERNAME}}
