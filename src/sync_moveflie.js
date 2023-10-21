@@ -12,7 +12,7 @@ const mirrorAPi = new MWBot({
   */
 async function login() {
     try {
-        await bot.loginGetEditToken({
+        await mirrorAPi.loginGetEditToken({
             username: process.env.IBOT_USERNAME,
             password: process.env.IBOT_PASSWORD,
         });
@@ -45,8 +45,8 @@ const getlog = async () => {
 };
 const movefile = async (logevent) => {
     try {
-        bot.editToken = (await bot.getEditToken()).csrftoken;
-        await bot.request({
+        mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
+        await mirrorAPi.request({
             action: "move",
             from:logevent.title,
             reason:logevent.comment,
@@ -56,7 +56,7 @@ const movefile = async (logevent) => {
             noredirect: "suppressredirect" in logevent.params ? true : false,
             bot:true,
             tags:"Bot",
-            token: bot.editToken,
+            token: mirrorAPi.editToken,
         });
         console.log(`已将${logevent.title}移动到${logevent.params.target_title}`);
     } catch (e) {
