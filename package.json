@@ -4,7 +4,7 @@
   "description": "fallenice2022's Bot fo MediaWiki",
   "main": "index.js",
   "scripts": {
-    "sync_moveflie": "node src/sync_moveflie.js",
+    "sync_moveflie": "node src/sync_moveflie.js"
   },
   "author": "fallenice2022",
   "license": "MIT",
