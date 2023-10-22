@@ -1,6 +1,8 @@
 "use strict";
 import MWBot from "mwbot";
 import moment from "moment";
+import dotenv from "dotenv";
+dotenv.config();
 
 const mirrorAPi = new MWBot({
     apiUrl: "https://moegirl.uk/api.php",
@@ -12,7 +14,7 @@ const mirrorAPi = new MWBot({
   */
 async function login() {
     try {
-        await mirrorAPi.loginGetEditToken({
+        await mirrorAPi.login({
             username: process.env.IBOT_USERNAME,
             password: process.env.IBOT_PASSWORD,
         });
@@ -35,7 +37,7 @@ const getlog = async () => {
                 lelimit: "max",
                 format: "json",
             });
-            apcontinue = allPages.continue?.apcontinue || false;
+            apcontinue = result.continue?.apcontinue || false;
             PageList = result.query.logevents;
         } catch (error) {
             throw new Error(`获取共享站移动日志出错：${error}`);
@@ -43,6 +45,10 @@ const getlog = async () => {
     }
     return PageList;
 };
+/**
+  * 移动文件函数
+  * @param {object} logevent
+  */
 const movefile = async (logevent) => {
     try {
         mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
@@ -60,7 +66,7 @@ const movefile = async (logevent) => {
         });
         console.log(`已将${logevent.title}移动到${logevent.params.target_title}`);
     } catch (e) {
-        switch (e) {
+        switch (e.code) {
             case "missingtitle":
                 console.warn("镜像站无", logevent.title);
                 break;
@@ -87,7 +93,7 @@ const main = async (retryCount = 5) => {
             } else {
                 console.log(`正在尝试同步${filecount}条文件移动日志`);
                 for(let i=0;i<filecount;i++){
-                    await movefile(logevents[i]);// 移动文件函数
+                    await movefile(movelog[i]);// 移动文件函数
                 }
             console.log("同步移动文件结束");
             }

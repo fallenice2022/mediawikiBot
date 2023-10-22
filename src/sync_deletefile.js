@@ -1,6 +1,8 @@
 "use strict";
 import MWBot from "mwbot";
 import moment from "moment";
+import dotenv from "dotenv";
+dotenv.config();
 
 const mirrorAPi = new MWBot({ apiUrl: "https://moegirl.uk/api.php" }, { timeout: 30000 });
 const commonsAPi = new MWBot({ apiUrl: "https://commons.moegirl.org.cn/api.php" }, { timeout: 30000 });
@@ -9,7 +11,7 @@ const commonsAPi = new MWBot({ apiUrl: "https://commons.moegirl.org.cn/api.php" 
   */
 async function login() {
     try {
-        await mirrorAPi.loginGetEditToken({
+        await mirrorAPi.login({
             username: process.env.SBOT_USERNAME,
             password: process.env.SBOT_PASSWORD,
         });
@@ -35,7 +37,7 @@ const getlog = async () => {
                 'lelimit': 'max',
                 'format': 'json'
                 });
-            apcontinue = allPages.continue?.apcontinue || false;
+            apcontinue = result.continue?.apcontinue || false;
             PageList = result.query.logevents;
         } catch (error) {
             throw new Error(`获取共享站删除日志出错：${error}`);
@@ -45,13 +47,13 @@ const getlog = async () => {
 };
 /**
   * 删除文件函数
-  * @param {array} logevent
+  * @param {object} logevent
   */
-const deletefile = (logevent) => {
+const deletefile = async (logevent) =>  {
     if (logevent.comment.search('[違违]反') !== -1){
         console.log("和谐你全家");
     } else {
-        commonsAPi.request({
+        await commonsAPi.request({
             "action":"parse",
             "format":"json",
             "page":logevent.title,
@@ -71,15 +73,14 @@ const deletefile = (logevent) => {
                 });
                 console.log(`已删除${logevent.title}`);
             } catch (err) {
-                if (err === "missingtitle") {
+                if (err.code === "missingtitle") {
                     console.warn("镜像站无", logevent.title);
                 } else {
-                    console.error("[Delete a file]", e);
+                    console.error("[Delete a file]", err);
                 }
             }
         });
     };
-
 };
 
 const main = async (retryCount = 5) => {
@@ -96,7 +97,7 @@ const main = async (retryCount = 5) => {
             } else {
                 console.log(`正在尝试同步${filecount}条文件删除日志`);
                 for(let i=0;i<filecount;i++){
-                    deletefile(logevents[i]);// 移动文件函数
+                    await deletefile(deletelog[i]);// 删除文件函数
                 }
             console.log("同步删除文件结束");
             }
