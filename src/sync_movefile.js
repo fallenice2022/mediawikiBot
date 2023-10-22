@@ -78,18 +78,18 @@ const main = async (retryCount = 5) => {
     while (retries < retryCount) {
         try {
             await login();
-            console.log("登录成功。正在获取所有页面……");
+            console.log("登录成功。正在获取移动日志……");
 
             const movelog = await getlog();
             const filecount = movelog.length;
             if(filecount===0){
-                console.warn("无可同步移动的文件", { type: "warn" });
+                console.warn("无可同步移动的文件");
             } else {
                 console.log(`正在尝试同步${filecount}条文件移动日志`);
                 for(let i=0;i<filecount;i++){
                     await movefile(logevents[i]);// 移动文件函数
                 }
-            console.log("同步移动文件结束", { type: "success" });
+            console.log("同步移动文件结束");
             }
             return;
         } catch (error) {

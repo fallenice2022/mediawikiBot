@@ -1,0 +1,22 @@
+name: 同步文件删除
+
+on:
+  schedule:
+    - cron: 0 21 * * * #北京时间每天凌晨5:00执行
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - run: echo "开始移动文件"
+      - name: 安装依赖
+        run: npm i
+      - name: 更新页面
+        env:
+          MW_USERNAME: ${{secrets.SBOT_NAME}}
+          MW_PASSWORD: ${{secrets.SBOT_PASSWORD}}
+        run: node src/sync_deletefile.js

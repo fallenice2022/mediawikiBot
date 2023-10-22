@@ -4,6 +4,7 @@
   "description": "fallenice2022's Bot fo MediaWiki",
   "main": "index.js",
   "scripts": {
+    "sync_deletefile": "node src/deletefile.js",
     "sync_moveflie": "node src/sync_moveflie.js"
   },
   "author": "fallenice2022",
