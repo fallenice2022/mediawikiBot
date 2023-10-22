@@ -26,7 +26,7 @@ const getlog = async () => {
     let PageList = [], apcontinue = "";
     while (apcontinue !== false) {
         try {
-            const result = commonsAPi.request({
+            const result = await commonsAPi.request({
                 'lenamespace': '6',
                 'list':'logevents',
                 'leaction':'delete/delete',

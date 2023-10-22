@@ -25,7 +25,7 @@ const getlog = async () => {
     let PageList = [], apcontinue = "";
     while (apcontinue !== false) {
         try {
-            const result = new MWBot({apiUrl: "https://commons.moegirl.org.cn/api.php"}, {timeout: 30000}).request({
+            const result = await new MWBot({apiUrl: "https://commons.moegirl.org.cn/api.php"}, {timeout: 30000}).request({
                 lenamespace: "6",
                 list:"logevents",
                 leaction:"move/move",
