@@ -20,4 +20,4 @@ jobs:
         env:
           MW_USERNAME: ${{secrets.IBOT_USERNAME}}
           MW_PASSWORD: ${{secrets.IBOT_PASSWORD}}
-        run: node src/sync_moveflie.js
+        run: node src/sync_movefile.js
