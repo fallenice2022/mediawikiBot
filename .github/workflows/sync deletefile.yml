@@ -3,6 +3,7 @@ name: 同步文件删除
 on:
   schedule:
     - cron: 0 21 * * * #北京时间每天凌晨5:00执行
+  workflow_dispatch:
 
 jobs:
   update:
