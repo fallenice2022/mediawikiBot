@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-      - run: echo "开始移动文件"
+      - run: echo "开始删除文件"
       - name: 安装依赖
         run: npm i
       - name: 更新页面

@@ -22,7 +22,9 @@ async function login() {
         throw new Error(`登录失败：${error}`);
     }
 }
- 
+/**
+ * @returns {Promise<object[]>}
+ */
 const getlog = async () => {
     let PageList = [], apcontinue = "";
     while (apcontinue !== false) {

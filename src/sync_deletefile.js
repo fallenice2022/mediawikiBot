@@ -16,6 +16,7 @@ async function login() {
             password: process.env.SBOT_PASSWORD,
         });
     } catch (error) {
+        console.log(error.response);
         if (error.ReadTimeout) {
             throw new Error(`登录超时`);
         } else {
@@ -23,7 +24,9 @@ async function login() {
         }
     }
 }
-
+/**
+ * @returns {Promise<object[]>}
+ */
 const getlog = async () => {
     let PageList = [], apcontinue = "";
     while (apcontinue !== false) {
