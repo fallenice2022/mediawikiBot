@@ -1,8 +1,6 @@
 "use strict";
 import MWBot from "mwbot";
 import moment from "moment";
-import dotenv from "dotenv";
-dotenv.config();
 
 const mirrorAPi = new MWBot({ apiUrl: "https://moegirl.uk/api.php" }, { timeout: 30000 });
 const commonsAPi = new MWBot({ apiUrl: "https://commons.moegirl.org.cn/api.php" }, { timeout: 30000 });

@@ -1,8 +1,6 @@
 "use strict";
 import MWBot from "mwbot";
 import moment from "moment";
-import dotenv from "dotenv";
-dotenv.config();
 
 const mirrorAPi = new MWBot({
     apiUrl: "https://moegirl.uk/api.php",

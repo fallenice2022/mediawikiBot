@@ -11,9 +11,8 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "dotenv": "^16.3.1",
+    "moment": "^2.29.4",
     "mwbot": "^2.1.3",
-    "node-cron": "^3.0.2",
-    "moment": "^2.29.4"
+    "node-cron": "^3.0.2"
   }
 }
