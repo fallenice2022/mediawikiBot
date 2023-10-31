@@ -85,7 +85,6 @@ const main = async (retryCount = 5) => {
         try {
             await login();
             console.log("登录成功。正在获取移动日志……");
-
             const movelog = await getlog();
             const filecount = movelog.length;
             if(filecount===0){

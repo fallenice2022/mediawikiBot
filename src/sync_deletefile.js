@@ -12,9 +12,9 @@ async function login() {
         await mirrorAPi.login({
             username: process.env.SBOT_USERNAME,
             password: process.env.SBOT_PASSWORD,
-        });
+        },{ retry: 1 });
     } catch (error) {
-        if (error.ReadTimeout) {
+        if (error == "ESOCKETTIMEDOUT") {
             throw new Error(`登录超时`);
         } else {
             throw new Error(`登录失败：${error}`);
@@ -36,7 +36,7 @@ const getlog = async () => {
                 'action': 'query',
                 'lelimit': 'max',
                 'format': 'json'
-                });
+                },{ retry: 2 });
             apcontinue = result.continue?.apcontinue || false;
             PageList = result.query.logevents;
         } catch (error) {
@@ -53,16 +53,20 @@ const deletefile = async (logevent) =>  {
     if (logevent.comment.search('[違违]反') !== -1){
         console.log("和谐你全家");
     } else {
-        await commonsAPi.request({
-            "action":"parse",
-            "format":"json",
-            "page":logevent.title,
-            "prop":"wikitext",
-        }).then(() => {
+        try {
+            await commonsAPi.request({
+                "action":"parse",
+                "format":"json",
+                "page":logevent.title,
+                "prop":"wikitext",
+            },{ retry: 2 });
             console.log(`${logevent.title}仍然存在共享站，跳过`); //保留可能的旧版本文件调用
-        }).catch(async () => {
-            mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
-            try {
+        } catch (e) {
+            if (e == "ESOCKETTIMEDOUT") {
+                console.error(`网络连接超时`);
+                deletefile(logevent);
+            } else if (e.code == "missingtitle") {
+                mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
                 await mirrorAPi.request({
                     'action':'delete',
                     'format':'json',
@@ -70,16 +74,19 @@ const deletefile = async (logevent) =>  {
                     'reason':"自动删除共享站删除的文件",
                     'token':mirrorAPi.editToken,
                     'tags':'Bot'
+                },{ retry: 1 }).then(() => {
+                    console.log(`已删除${logevent.title}`);
+                }).catch(err => {
+                    if (err.code === "missingtitle") {
+                        console.warn("镜像站无", logevent.title);
+                    } else {
+                        console.error("[Delete a file]", err);
+                    }
                 });
-                console.log(`已删除${logevent.title}`);
-            } catch (err) {
-                if (err.code === "missingtitle") {
-                    console.warn("镜像站无", logevent.title);
-                } else {
-                    console.error("[Delete a file]", err);
-                }
+            } else {
+                throw new Error(`[Delete a file] ${err}`);
             }
-        });
+        }
     };
 };
 
@@ -89,7 +96,6 @@ const main = async (retryCount = 5) => {
         try {
             await login();
             console.log("登录成功。正在获取删除日志……");
-
             const deletelog = await getlog();
             const filecount = deletelog.length;
             if(filecount===0){
