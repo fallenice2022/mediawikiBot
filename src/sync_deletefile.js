@@ -38,7 +38,7 @@ const getlog = async () => {
                 'format': 'json'
                 },{ retry: 2 });
             apcontinue = result.continue?.apcontinue || false;
-            PageList = result.query.logevents;
+            PageList.push(result.query.logevents);
         } catch (error) {
             throw new Error(`获取共享站删除日志出错：${error}`);
         }
@@ -48,6 +48,8 @@ const getlog = async () => {
 /**
   * 删除文件函数
   * @param {object} logevent
+  * @param {string} logevent.comment
+  * @param {string} logevent.title
   */
 const deletefile = async (logevent) =>  {
     if (logevent.comment.search('[違违]反') !== -1){
@@ -64,7 +66,7 @@ const deletefile = async (logevent) =>  {
         } catch (e) {
             if (e == "ESOCKETTIMEDOUT") {
                 console.error(`网络连接超时`);
-                deletefile(logevent);
+                setTimeout(deletefile(logevent), 1000); 
             } else if (e.code == "missingtitle") {
                 mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
                 await mirrorAPi.request({

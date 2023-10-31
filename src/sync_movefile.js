@@ -24,7 +24,7 @@ async function login() {
  * @returns {Promise<object[]>}
  */
 const getlog = async () => {
-    let PageList = [], apcontinue = "";
+    let PageList = [], apcontinue = "||";
     while (apcontinue !== false) {
         try {
             const result = await new MWBot({apiUrl: "https://commons.moegirl.org.cn/api.php"}, {timeout: 30000}).request({
@@ -36,9 +36,10 @@ const getlog = async () => {
                 action: "query",
                 lelimit: "max",
                 format: "json",
+                apcontinue
             });
             apcontinue = result.continue?.apcontinue || false;
-            PageList = result.query.logevents;
+            PageList.push(result.query.logevents);
         } catch (error) {
             throw new Error(`获取共享站移动日志出错：${error}`);
         }
@@ -48,6 +49,11 @@ const getlog = async () => {
 /**
   * 移动文件函数
   * @param {object} logevent
+  * @param {object} logevent.params
+  * @param {string} logevent.params.target_title
+  * @param {string} logevent.params.suppressredirect
+  * @param {string} logevent.comment
+  * @param {string} logevent.title
   */
 const movefile = async (logevent) => {
     try {
