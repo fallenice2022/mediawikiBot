@@ -40,7 +40,7 @@ const getlog = async () => {
             });
             apcontinue = result.continue?.apcontinue || false;
             for (const logevent of result.query.logevents) {
-                PageList.add(logevent);
+                PageList.push(logevent);
             }
         } catch (error) {
             throw new Error(`获取共享站移动日志出错：${error}`);
