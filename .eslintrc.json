@@ -1,0 +1,35 @@
+{
+    "env": {
+        "node": true,
+        "es6": true,
+        "es2020": true,
+        "es2021": true
+    },
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "globals": {
+        "MWBot": "readonly",
+        "moment": "readonly"
+    },
+    "rules":{
+        "indent": [
+            2,
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "no-new-func": "error",
+        "no-var": "error",
+        "no-unused-vars": [
+            1,
+            {
+                "varsIgnorePattern": "^_"
+            }
+        ],
+        "dot-notation": "error",
+        "no-else-return": "error"
+    }
+}

@@ -39,7 +39,9 @@ const getlog = async () => {
                 apcontinue
             });
             apcontinue = result.continue?.apcontinue || false;
-            PageList.push(result.query.logevents);
+            for (const logevent of result.query.logevents) {
+                PageList.add(logevent);
+            }
         } catch (error) {
             throw new Error(`获取共享站移动日志出错：${error}`);
         }
@@ -100,7 +102,7 @@ const main = async (retryCount = 5) => {
                 for(let i=0;i<filecount;i++){
                     await movefile(movelog[i]);// 移动文件函数
                 }
-            console.log("同步移动文件结束");
+                console.log("同步移动文件结束");
             }
             return;
         } catch (error) {
