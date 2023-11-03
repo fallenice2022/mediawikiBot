@@ -89,7 +89,7 @@ const deletefile = async (logevent) => {
                     }
                 });
             } else {
-                throw new Error(`[Delete a file] ${err}`);
+                throw new Error(`[Delete a file] ${e}`);
             }
         }
     };
