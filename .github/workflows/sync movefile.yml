@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
+          cache: "npm"
       - run: echo "开始移动文件"
       - name: 安装依赖
         run: npm i
