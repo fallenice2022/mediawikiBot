@@ -79,15 +79,14 @@ const deletefile = async (logevent) => {
                     'reason': "自动删除共享站删除的文件",
                     'token': mirrorAPi.editToken,
                     'tags': 'Bot'
-                }, { retry: 1 }).then(() => {
-                    console.log(`已删除${logevent.title}`);
-                }).catch(err => {
+                }, { retry: 1 }).catch(err => {
                     if (err.code === "missingtitle") {
                         console.warn("镜像站无", logevent.title);
                     } else {
                         console.error("[Delete a file]", err);
                     }
                 });
+                console.log(`已删除${logevent.title}`);
             } else {
                 throw new Error(`[Delete a file] ${e}`);
             }
@@ -122,4 +121,6 @@ const main = async (retryCount = 5) => {
 };
 
 // 最大尝试次数5
-main(5);
+main(5).catch(err => {
+    console.error(err);
+});

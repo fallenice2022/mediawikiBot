@@ -114,4 +114,6 @@ const main = async (retryCount = 5) => {
 };
 
 // 最大尝试次数5
-main(5);
+main(5).catch(err => {
+    console.error(err);
+});;
