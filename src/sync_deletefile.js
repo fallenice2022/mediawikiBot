@@ -110,9 +110,7 @@ const main = async (Maxretry = 5, speedlimit = 20) => {
                 for (let i = 0; i < filecount; i++) {
                     await deletefile(deletelog[i]);// 删除文件函数
                     speedlimit--;
-                    speedlimit = 0 && setTimeout(() => {
-                        speedlimit = count[1];
-                    }, 60 * 1000);
+                    speedlimit === 0 && setTimeout(() => { speedlimit = count[1]; }, 60 * 1000);
                 }
                 console.log("同步删除文件结束");
             }
