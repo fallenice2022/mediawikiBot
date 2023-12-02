@@ -7,6 +7,7 @@ const mirrorAPi = new MWBot({
 }, {
     timeout: 30000,
 });
+const sleep = (second) => new Promise((res) => setTimeout(res, second * 1000));
 /**
   * 登录镜像站
   */
@@ -102,7 +103,11 @@ const main = async (Maxretry = 5, speedlimit = 20) => {
                 for(let i=0;i<filecount;i++){
                     await movefile(movelog[i]);// 移动文件函数
                     speedlimit--;
-                    speedlimit === 0 && setTimeout(() => { speedlimit = count[1]; }, 60 * 1000);
+                    speedlimit--;
+                    if(speedlimit === 0 && !i === filecount){
+                        await sleep(60);
+                        speedlimit = count[1];
+                    }
                 }
                 console.log("同步移动文件结束");
             }

@@ -4,6 +4,7 @@ import moment from "moment";
 
 const mirrorAPi = new MWBot({ apiUrl: "https://moegirl.uk/api.php" }, { timeout: 30000 });
 const commonsAPi = new MWBot({ apiUrl: "https://commons.moegirl.org.cn/api.php" }, { timeout: 30000 });
+const sleep = (second) => new Promise((res) => setTimeout(res, second * 1000));
 /**
   * 登录镜像站
   */
@@ -110,7 +111,10 @@ const main = async (Maxretry = 5, speedlimit = 20) => {
                 for (let i = 0; i < filecount; i++) {
                     await deletefile(deletelog[i]);// 删除文件函数
                     speedlimit--;
-                    speedlimit === 0 && setTimeout(() => { speedlimit = count[1]; }, 60 * 1000);
+                    if(speedlimit === 0 && !i === filecount){
+                        await sleep(60);
+                        speedlimit = count[1];
+                    }
                 }
                 console.log("同步删除文件结束");
             }
