@@ -73,7 +73,7 @@ const deletefile = async (logevent) => {
                 setTimeout(deletefile(logevent), 1000);
             } else if (e.code == "missingtitle") {
                 mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
-                mirrorAPi.request({
+                await mirrorAPi.request({
                     'action': 'delete',
                     'format': 'json',
                     'title': logevent.title,

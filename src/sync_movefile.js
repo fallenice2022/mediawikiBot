@@ -103,7 +103,6 @@ const main = async (Maxretry = 5, speedlimit = 20) => {
                 for(let i=0;i<filecount;i++){
                     await movefile(movelog[i]);// 移动文件函数
                     speedlimit--;
-                    speedlimit--;
                     if(speedlimit === 0 && !i === filecount){
                         await sleep(60);
                         speedlimit = count[1];
