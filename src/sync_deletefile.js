@@ -6,14 +6,16 @@ const mirrorAPi = new MWBot({ apiUrl: "https://moegirl.uk/api.php" }, { timeout:
 const commonsAPi = new MWBot({ apiUrl: "https://commons.moegirl.org.cn/api.php" }, { timeout: 30000 });
 const sleep = (second) => new Promise((res) => setTimeout(res, second * 1000));
 /**
-  * 登录镜像站
-  */
-async function login() {
+ * 登录镜像站
+ * @param {new MWBot} siteAPI 
+ * @param {string} botname 
+ */
+async function login(siteAPI, botname) {
     try {
-        await mirrorAPi.login({
-            username: process.env.SBOT_USERNAME,
-            password: process.env.SBOT_PASSWORD,
-        }, { retry: 1 });
+        await siteAPI.login({
+            username: process.env[`${botname}_USERNAME`],
+            password: process.env[`${botname}_PASSWORD`],
+        });
     } catch (error) {
         if (error == "ESOCKETTIMEDOUT") {
             throw new Error(`登录超时`);
@@ -100,7 +102,7 @@ const main = async (Maxretry = 5, speedlimit = 20) => {
     const count = [0/* retrycount */, speedlimit];
     while (count[0] < Maxretry) {
         try {
-            await login();
+            await Promise.all([login(mirrorAPi, "SBOT"), login(commonsAPi, "CM")]);
             console.log("登录成功。正在获取删除日志……");
             const deletelog = await getlog();
             const filecount = deletelog.length;

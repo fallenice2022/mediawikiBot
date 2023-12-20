@@ -21,4 +21,6 @@ jobs:
         env:
           IBOT_USERNAME: ${{secrets.IBOT_USERNAME}}
           IBOT_PASSWORD: ${{secrets.IBOT_PASSWORD}}
+          CM_USERNAME: ${{secrets.CM_USERNAME}}
+          CM_PASSWORD: ${{secrets.CM_PASSWORD}}
         run: node src/sync_movefile.js

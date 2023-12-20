@@ -2,20 +2,19 @@
 import MWBot from "mwbot";
 import moment from "moment";
 
-const mirrorAPi = new MWBot({
-    apiUrl: "https://moegirl.uk/api.php",
-}, {
-    timeout: 30000,
-});
+const mirrorAPi = new MWBot({ apiUrl: "https://moegirl.uk/api.php" }, { timeout: 30000 });
+const commonsAPi = new MWBot({ apiUrl: "https://commons.moegirl.org.cn/api.php" }, { timeout: 30000 });
 const sleep = (second) => new Promise((res) => setTimeout(res, second * 1000));
 /**
-  * 登录镜像站
-  */
-async function login() {
+ * 登录镜像站
+ * @param {new MWBot} siteAPI 
+ * @param {string} botname 
+ */
+async function login(siteAPI, botname) {
     try {
-        await mirrorAPi.login({
-            username: process.env.IBOT_USERNAME,
-            password: process.env.IBOT_PASSWORD,
+        await siteAPI.login({
+            username: process.env[`${botname}_USERNAME`],
+            password: process.env[`${botname}_PASSWORD`],
         });
     } catch (error) {
         throw new Error(`登录失败：${error}`);
@@ -28,12 +27,12 @@ const getlog = async () => {
     let PageList = [], apcontinue = "||";
     while (apcontinue !== false) {
         try {
-            const result = await new MWBot({apiUrl: "https://commons.moegirl.org.cn/api.php"}, {timeout: 30000}).request({
+            const result = await commonsAPi.request({
                 lenamespace: "6",
-                list:"logevents",
-                leaction:"move/move",
-                leend:moment(new Date()-32*3600*1000).toJSON(),
-                lestart:"",
+                list: "logevents",
+                leaction: "move/move",
+                leend: moment(new Date() - 32 * 3600 * 1000).toJSON(),
+                lestart: "",
                 action: "query",
                 lelimit: "max",
                 format: "json",
@@ -63,14 +62,14 @@ const movefile = async (logevent) => {
         mirrorAPi.editToken = (await mirrorAPi.getEditToken()).csrftoken;
         await mirrorAPi.request({
             action: "move",
-            from:logevent.title,
-            reason:logevent.comment,
-            to:logevent.params.target_title,
+            from: logevent.title,
+            reason: logevent.comment,
+            to: logevent.params.target_title,
             format: "json",
             watchlist: "nochange",
             noredirect: "suppressredirect" in logevent.params ? true : false,
-            bot:true,
-            tags:"Bot",
+            bot: true,
+            tags: "Bot",
             token: mirrorAPi.editToken,
         });
         console.log(`已将${logevent.title}移动到${logevent.params.target_title}`);
@@ -82,7 +81,7 @@ const movefile = async (logevent) => {
             case "articleexists":
                 console.error(`目标页面“${logevent.params.target_title}”已存在，请检查！`);
                 break;
-            default:console.error("[Move a file]", e);
+            default: console.error("[Move a file]", e);
                 break;
         }
     }
@@ -92,18 +91,18 @@ const main = async (Maxretry = 5, speedlimit = 20) => {
     const count = [0/* retrycount */, speedlimit];
     while (count[0] < Maxretry) {
         try {
-            await login();
+            await Promise.all([login(mirrorAPi, "IBOT"), login(commonsAPi, "CM")]);
             console.log("登录成功。正在获取移动日志……");
             const movelog = await getlog();
             const filecount = movelog.length;
-            if(filecount===0){
+            if (filecount === 0) {
                 console.warn("无可同步移动的文件");
             } else {
                 console.log(`正在尝试同步${filecount}条文件移动日志`);
-                for(let i=0;i<filecount;i++){
+                for (let i = 0; i < filecount; i++) {
                     await movefile(movelog[i]);// 移动文件函数
                     speedlimit--;
-                    if(speedlimit === 0 && i !== filecount){
+                    if (speedlimit === 0 && i !== filecount) {
                         await sleep(60);
                         speedlimit = count[1];
                     }

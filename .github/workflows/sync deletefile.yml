@@ -21,4 +21,6 @@ jobs:
         env:
           SBOT_USERNAME: ${{secrets.SBOT_USERNAME}}
           SBOT_PASSWORD: ${{secrets.SBOT_PASSWORD}}
+          CM_USERNAME: ${{secrets.CM_USERNAME}}
+          CM_PASSWORD: ${{secrets.CM_PASSWORD}}
         run: node src/sync_deletefile.js
